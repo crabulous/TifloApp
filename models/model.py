@@ -1,4 +1,3 @@
-import torch
 from transformers import BlipProcessor, BlipForConditionalGeneration, GPT2LMHeadModel, GPT2Tokenizer
 from PIL import Image
 import random

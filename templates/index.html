@@ -1,28 +1,29 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Тифлокомментирование изображений</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
     <div class="container">
         <h1 class="title">Тифлокомментирование изображений</h1>
         <form id="uploadForm" enctype="multipart/form-data" method="post" action="/process/">
-            <input name="file" type="file" id="fileInput" accept=".jpg, .jpeg, .png, .svg">
+            <input name="file" type="file" id="fileInput" accept=".jpg, .jpeg, .png, .svg" />
             <label for="fileInput" id="fileLabel">Выбрать файл</label>
             <button type="submit">Обработать</button>
-            <p id="loadingText" style="display: none;">Идёт загрузка...</p>
-            <p id="errorText" style="display: none; color: red;">Неправильный тип файла</p>
+            <p id="loadingText">Идёт загрузка...</p>
+            <p id="errorText">Неправильный тип файла</p>
         </form>
         <div id="gallery">
             <h2>Галерея</h2>
             {% if gallery %}
             <div class="gallery-container">
                 {% for item in gallery %}
-                <div class="gallery-item">
-                    <img src="/static/processed/{{ item.filename }}" alt="{{ item.caption }}">
+                <div class="gallery-item {% if loop.first %}new-item{% endif %}">
+                    {% if loop.first %}<span class="new-badge">N</span>{% endif %}
+                    <img src="/static/processed/{{ item.filename }}?v={{ loop.index }}" alt="{{ item.caption }}" />
                     <p>{{ item.caption }}</p>
                 </div>
                 {% endfor %}
@@ -32,47 +33,7 @@
             {% endif %}
         </div>
     </div>
-    <script>
-        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const fileInput = document.getElementById('fileInput');
-            const fileLabel = document.getElementById('fileLabel');
-            const errorText = document.getElementById('errorText');
 
-            if (fileInput.files.length === 0 || !isValidFileType(fileInput.files[0])) {
-                errorText.style.display = 'block'; // Отображаем сообщение об ошибке
-                return; // Прерываем отправку формы
-            }
-
-            errorText.style.display = 'none';
-
-            const formData = new FormData(event.target);
-            document.getElementById('loadingText').style.display = 'block';
-            const response = await fetch(event.target.action, {
-                method: 'POST',
-                body: formData
-            });
-            const html = await response.text();
-            document.getElementById('loadingText').style.display = 'none';
-            document.open();
-            document.write(html);
-            document.close();
-        });
-
-        document.getElementById('fileInput').addEventListener('change', function() {
-            const fileLabel = document.getElementById('fileLabel');
-            if (this.files && this.files.length > 0) {
-                fileLabel.textContent = this.files[0].name;
-            } else {
-                fileLabel.textContent = '';
-            }
-        });
-
-        function isValidFileType(file) {
-            const validExtensions = ['.jpg', '.jpeg', '.png', '.svg'];
-            const extension = '.' + file.name.split('.').pop().toLowerCase();
-            return validExtensions.includes(extension);
-        }
-    </script>
+    <script src="/static/upload.js"></script>
 </body>
 </html>

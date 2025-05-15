@@ -21,11 +21,28 @@ UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def save_image_info(image_info):
-    existing_info = load_image_info()
-    existing_info.update(image_info)
-    with open("image_info.json", "w", encoding="utf-8") as json_file:
-        json.dump(existing_info, json_file, ensure_ascii=False)
+# def load_image_info():
+#     """Загружает данные, всегда возвращает список словарей"""
+#     try:
+#         with open("image_info.json", "r", encoding="utf-8") as f:
+#             data = json.load(f)
+#             return data if isinstance(data, list) else []
+#     except (FileNotFoundError, json.JSONDecodeError):
+#         return []
+
+
+def save_image_info(filename: str, caption: str):
+    """Сохраняет новое изображение (добавляет в начало)"""
+    data = load_image_info()
+
+    # Удаляем старую запись если существует
+    data = [item for item in data if item["filename"] != filename]
+
+    # Добавляем новую запись в начало
+    data.insert(0, {"filename": filename, "caption": caption})
+
+    with open("image_info.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
 
 def load_image_info():
@@ -43,7 +60,7 @@ def load_image_info():
 async def read_root(request: Request):
     logger.info("GET request to '/' endpoint")
     image_info = load_image_info()
-    gallery = [{"filename": filename, "caption": caption} for filename, caption in image_info.items()]
+    gallery = [item for item in image_info]
     return templates.TemplateResponse("index.html", {"request": request, "gallery": gallery, "result": None})
 
 
@@ -65,9 +82,8 @@ async def process_image(request: Request, file: UploadFile = File(...)):
 
     shutil.copyfile(file_location, processed_file_location)
     logger.info(f"File copied to {processed_file_location}")
-    image_info = {processed_filename: caption}
 
-    save_image_info(image_info)
+    save_image_info(processed_filename, caption)
 
     return await read_root(request)
 

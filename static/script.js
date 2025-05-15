@@ -1,3 +1,4 @@
+<script>
 document.getElementById('uploadForm').addEventListener('submit', async function(event) {
     event.preventDefault();
     const input = document.getElementById('fileInput');
@@ -10,9 +11,22 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
     });
 
     const result = await response.json();
-    const resultDiv = document.getElementById('result');
-    resultDiv.innerHTML = `<p>Filename: ${result.filename}</p><p>Caption: ${result.caption}</p>`;
+    const filename = result.filename;
 
-    // Перезагрузка галереи
-    window.location.reload();
+    // Проверяем, загрузилось ли изображение на сервер
+    const img = new Image();
+    img.onload = function () {
+        // Если изображение загрузилось — обновляем страницу
+        window.location.reload();
+    };
+    img.onerror = function () {
+        // Если не удалось загрузить — выводим ошибку
+        const errorText = document.getElementById('errorText');
+        errorText.innerText = 'Ошибка при загрузке изображения.';
+        errorText.style.display = 'block';
+    };
+
+    // Пробуем загрузить изображение (добавляем метку времени, чтобы избежать кэша)
+    img.src = `/static/processed/${filename}?t=${Date.now()}`;
 });
+</script>

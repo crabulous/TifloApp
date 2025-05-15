@@ -1,3 +1,4 @@
+/* Основные стили */
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
@@ -7,13 +8,14 @@ body {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    text-align: center; /* Центрирование элементов */
+    text-align: center;
 }
 
 .title {
     color: #333;
 }
 
+/* Форма загрузки */
 form {
     margin-bottom: 20px;
 }
@@ -22,46 +24,135 @@ form {
     display: none;
 }
 
+/* Кнопки и label с одинаковым стилем */
+#fileLabel, button {
+    display: inline-flex;            /* flex для центрирования */
+    justify-content: center;         /* по горизонтали */
+    align-items: center;             /* по вертикали */
+    width: 150px;                    /* фиксированная ширина */
+    height: 40px;                    /* фиксированная высота */
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0;                     /* убираем паддинги */
+    box-sizing: border-box;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    color: #fff;
+    user-select: none;
+
+    border: none;                   /* убираем бордер */
+    outline: none;                  /* убираем outline */
+    -webkit-appearance: none;       /* сброс нативного стиля */
+    -moz-appearance: none;
+    appearance: none;
+}
+
 #fileLabel {
     background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
+}
+
+#fileLabel:hover {
+    background-color: #0069d9;
 }
 
 button {
     background-color: #28a745;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
 }
 
 button:hover {
     background-color: #218838;
 }
 
+/* Галерея */
 .gallery-container {
-    display: flex;
-    flex-direction: column; /* Размещение элементов в столбик */
-    align-items: center; /* Центрирование по горизонтали */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    justify-items: center;
+    margin-top: 20px;
 }
 
 .gallery-item {
-    width: 300px; /* Установим фиксированную ширину для элементов галереи */
-    margin: 10px 0; /* Добавление отступов между элементами */
+    width: 100%;
+    max-width: 300px;
     text-align: center;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.gallery-item.new-item {
+    border: 3px solid #4CAF50;
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.4);
+    animation: pulse 2s infinite;
 }
 
 .gallery-item img {
-    width: 100%; /* Изображения занимают всю ширину контейнера */
-    max-width: 200px; /* Ограничим максимальный размер изображения */
+    width: 100%;
+    max-width: 200px;
     max-height: 200px;
     border-radius: 5px;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
 }
 
 .gallery-item p {
+    margin-top: 10px;
     text-align: center;
+    color: #000;          /* чёрный цвет */
+    font-size: 16px;
+}
+
+.new-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #ff5722;
+    color: white;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Анимации */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+/* Сообщения */
+#loadingText {
+    display: none;
+    color: #17a2b8;
+    font-weight: bold;
+}
+
+#errorText {
+    display: none;
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .gallery-container {
+        grid-template-columns: 1fr;
+    }
+
+    #fileLabel, button {
+        display: block;
+        width: 100%;
+        margin: 10px 0;
+    }
 }
