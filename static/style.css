@@ -1,0 +1,67 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center; /* Центрирование элементов */
+}
+
+.title {
+    color: #333;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+#fileInput {
+    display: none;
+}
+
+#fileLabel {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+.gallery-container {
+    display: flex;
+    flex-direction: column; /* Размещение элементов в столбик */
+    align-items: center; /* Центрирование по горизонтали */
+}
+
+.gallery-item {
+    width: 300px; /* Установим фиксированную ширину для элементов галереи */
+    margin: 10px 0; /* Добавление отступов между элементами */
+    text-align: center;
+}
+
+.gallery-item img {
+    width: 100%; /* Изображения занимают всю ширину контейнера */
+    max-width: 200px; /* Ограничим максимальный размер изображения */
+    max-height: 200px;
+    border-radius: 5px;
+}
+
+.gallery-item p {
+    text-align: center;
+}
