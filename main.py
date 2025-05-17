@@ -87,7 +87,7 @@ async def process_image(request: Request, file: UploadFile = File(...)):
 
     return await read_root(request)
 
-
+# uvicorn main:app --reload --host 127.0.0.1 --port 8000
 if __name__ == "__main__":
     import uvicorn
 
